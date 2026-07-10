@@ -64,3 +64,10 @@ async def api_disease(name: str):
 async def api_predict(req: PredictionRequest):
     result = predictor.predict(req.symptoms)
     return result
+
+
+@app.get('/', tags=['system'])
+async def root():
+    """Simple root endpoint so the service returns a friendly 200 at /
+    and provides a pointer to the health endpoint."""
+    return {"message": "MediRec API", "health_url": "/api/health"}
