@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 f819efe52b49895233ad620bdeee504f44702cbc HaiderAli <your.email@example.com> 1783690967 +0500	commit (initial): Sync local changes
+f819efe52b49895233ad620bdeee504f44702cbc 0000000000000000000000000000000000000000 HaiderAli <your.email@example.com> 1783690968 +0500	Branch: renamed refs/heads/master to refs/heads/main
+0000000000000000000000000000000000000000 f819efe52b49895233ad620bdeee504f44702cbc HaiderAli <your.email@example.com> 1783690968 +0500	Branch: renamed refs/heads/master to refs/heads/main
+f819efe52b49895233ad620bdeee504f44702cbc 98dd7f1327023ce1a950353f6ea41b1d0dc33108 HaiderAli <your.email@example.com> 1783691069 +0500	commit (merge): Resolve merge conflicts: keep local versions
+98dd7f1327023ce1a950353f6ea41b1d0dc33108 0000000000000000000000000000000000000000 HaiderAli <your.email@example.com> 1783691866 +0500	Branch: renamed refs/heads/main to refs/heads/main
+98dd7f1327023ce1a950353f6ea41b1d0dc33108 98dd7f1327023ce1a950353f6ea41b1d0dc33108 HaiderAli <your.email@example.com> 1783691866 +0500	Branch: renamed refs/heads/main to refs/heads/main

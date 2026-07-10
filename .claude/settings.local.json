@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Recurse -Force)",
+      "Bash(Select-Object -Property FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(npm install *)",
+      "Bash(python src/data_generator.py)",
+      "Bash(python src/preprocessing/preprocess.py)",
+      "Bash(python src/training/train_models.py)",
+      "Bash(python -c ' *)",
+      "Bash(npm run *)",
+      "Bash(npm uninstall *)"
+    ]
+  }
+}

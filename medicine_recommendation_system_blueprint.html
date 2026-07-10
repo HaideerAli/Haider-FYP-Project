@@ -1,0 +1,1348 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --emerald: #0D7A5F;
+    --emerald-light: #10A37F;
+    --emerald-pale: #D1FAE5;
+    --ink: #0A0F14;
+    --ink2: #111820;
+    --ink3: #1A2332;
+    --steel: #2A3A4E;
+    --muted: #6B8099;
+    --text: #E2EBF4;
+    --text-dim: #8FA3B8;
+    --border: rgba(201,168,76,0.15);
+    --border2: rgba(201,168,76,0.3);
+    --glass: rgba(26,35,50,0.8);
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0A0F14 0%, #0D1B2A 50%, #0A1A12 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 32px 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(13,122,95,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 20%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border2);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #E2EBF4 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .stat-div { width: 1px; background: var(--border); margin: 4px 0; }
+
+  /* Navigation */
+  .nav-wrapper {
+    background: var(--ink2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-wrapper::-webkit-scrollbar { display: none; }
+
+  .nav {
+    display: flex;
+    gap: 0;
+    min-width: max-content;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 14px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .phase-num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-btn.active .phase-num { background: var(--gold); color: var(--ink); }
+
+  /* Content */
+  .content { padding: 28px; max-width: 900px; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title .accent { color: var(--gold); }
+
+  .section-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .card-icon {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: rgba(201,168,76,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  /* Code blocks */
+  .code-block {
+    background: #060C12;
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: #A8C4E0;
+    position: relative;
+    overflow-x: auto;
+    margin-top: 8px;
+  }
+
+  .code-block .kw { color: #C084FC; }
+  .code-block .fn { color: #60A5FA; }
+  .code-block .str { color: #86EFAC; }
+  .code-block .cm { color: #4B6A80; }
+  .code-block .num { color: #FCD34D; }
+  .code-block .em { color: var(--gold-light); }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--border2);
+    color: var(--gold);
+    font-family: 'Outfit', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .copy-btn:hover { background: rgba(201,168,76,0.25); }
+
+  /* Prompt block */
+  .prompt-block {
+    background: linear-gradient(135deg, rgba(13,122,95,0.08), rgba(201,168,76,0.05));
+    border: 1px solid rgba(13,122,95,0.3);
+    border-left: 3px solid var(--emerald-light);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #C5DDF0;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .prompt-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--emerald-light);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Dataset cards */
+  .dataset-card {
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .dataset-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .dataset-card.primary { border-color: rgba(13,122,95,0.4); }
+
+  .dataset-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .dataset-meta { font-size: 11px; color: var(--text-dim); }
+  .dataset-tag {
+    display: inline-block;
+    background: rgba(13,122,95,0.15);
+    color: var(--emerald-light);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* Model comparison */
+  .model-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(10,15,20,0.4);
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+
+  .model-row.best { border-color: var(--border2); background: rgba(201,168,76,0.04); }
+  .model-row:hover { border-color: var(--border2); }
+
+  .model-name { font-size: 12.5px; font-weight: 500; flex: 1; }
+  .model-acc {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--emerald-light);
+    font-weight: 500;
+  }
+
+  .model-bar-wrap { width: 100px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .model-bar { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--emerald), var(--gold)); }
+
+  .best-badge {
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* File tree */
+  .file-tree {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 2;
+    color: #8FA3B8;
+    background: #060C12;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .ft-dir { color: var(--gold-light); font-weight: 500; }
+  .ft-file { color: #8FA3B8; }
+  .ft-py { color: #86EFAC; }
+  .ft-js { color: #FCD34D; }
+  .ft-json { color: #C084FC; }
+  .ft-md { color: #60A5FA; }
+  .ft-comment { color: #3A5568; font-style: italic; }
+
+  /* Step indicators */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 24px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .step-dot {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--ink3);
+    border: 1px solid var(--border2);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .step-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  /* Tech stack pills */
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(26,35,50,0.8);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin: 4px;
+  }
+
+  .tech-pill-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Endpoint cards */
+  .endpoint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(6,12,18,0.6);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .method {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 44px;
+    text-align: center;
+  }
+
+  .method.post { background: rgba(134,239,172,0.15); color: #86EFAC; }
+  .method.get { background: rgba(96,165,250,0.15); color: #60A5FA; }
+
+  .endpoint-path { color: var(--text); flex: 1; }
+  .endpoint-desc { color: var(--text-dim); font-size: 11px; font-family: 'Outfit', sans-serif; }
+
+  /* Deploy cards */
+  .deploy-option {
+    background: var(--ink3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .deploy-option:hover { border-color: var(--border2); }
+  .deploy-option.recommended { border-color: rgba(13,122,95,0.5); }
+
+  .deploy-logo { font-size: 24px; margin-bottom: 8px; }
+  .deploy-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .deploy-desc { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+  .deploy-rec { 
+    display: inline-block;
+    background: rgba(13,122,95,0.2);
+    color: var(--emerald-light);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 20px 0;
+  }
+
+  /* Info tag */
+  .info-tag {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  .info-icon { color: #60A5FA; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Tab panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--ink2); }
+  ::-webkit-scrollbar-thumb { background: var(--steel); border-radius: 2px; }
+
+  /* Supervisor tag */
+  .supervisor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(201,168,76,0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+
+  .sup-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--emerald), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .sup-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .sup-email { font-size: 11px; color: var(--text-dim); }
+  .sup-id { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge"><span class="badge-dot"></span> Top Tier Project Blueprint</div>
+  <h1 class="hero-title">Medicine Recommendation System</h1>
+  <p class="hero-sub">AI-powered virtual assistant for personalized medicine suggestions. Complete VSCode project blueprint with datasets, model training, FastAPI backend, and luxury React frontend.</p>
+  
+  <div class="stats-row">
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">Phases</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">6+</span><span class="stat-label">Models</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">FastAPI</span><span class="stat-label">Backend</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">React</span><span class="stat-label">Frontend</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">Docker</span><span class="stat-label">Deploy</span></div>
+  </div>
+
+  <div class="supervisor">
+    <div class="sup-avatar">MH</div>
+    <div>
+      <div class="sup-name">Dr. Mushtaq Hussain</div>
+      <div class="sup-email">mushtaq.hussain@vu.edu.pk</div>
+      <div class="sup-id">Team: themushtaq48</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-wrapper">
+  <div class="nav" id="nav">
+    <button class="nav-btn active" onclick="show('overview',this)"><span class="phase-num">★</span> Overview</button>
+    <button class="nav-btn" onclick="show('dataset',this)"><span class="phase-num">1</span> Dataset</button>
+    <button class="nav-btn" onclick="show('preprocess',this)"><span class="phase-num">2</span> Preprocess</button>
+    <button class="nav-btn" onclick="show('models',this)"><span class="phase-num">3</span> Model Training</button>
+    <button class="nav-btn" onclick="show('backend',this)"><span class="phase-num">4</span> FastAPI Backend</button>
+    <button class="nav-btn" onclick="show('frontend',this)"><span class="phase-num">5</span> React Frontend</button>
+    <button class="nav-btn" onclick="show('structure',this)"><span class="phase-num">6</span> File Structure</button>
+    <button class="nav-btn" onclick="show('deploy',this)"><span class="phase-num">7</span> Deployment</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ========== OVERVIEW ========== -->
+<div class="panel active" id="panel-overview">
+  <p class="section-title"><span class="accent">§</span> Project Architecture Overview</p>
+  <p class="section-desc">A complete end-to-end AI system — from raw medical dataset to deployed React application. Follow phases in order for a clean project build.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-dot">1</div>
+      <div class="step-body">
+        <div class="step-title">Dataset Collection & Exploration</div>
+        <div class="step-desc">Download Kaggle medical datasets: symptom-disease mappings, prescription data, and drug information. Load into pandas and explore distributions.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">2</div>
+      <div class="step-body">
+        <div class="step-title">Data Preprocessing & Feature Engineering</div>
+        <div class="step-desc">Clean missing values, encode symptoms using MultiLabelBinarizer, normalize features, handle class imbalance with SMOTE, and split into train/test sets.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-body">
+        <div class="step-title">Multi-Model Training & Evaluation</div>
+        <div class="step-desc">Train 6+ models: Random Forest, SVM, XGBoost, Naive Bayes, Decision Tree, and a deep learning MLP. Compare accuracy, F1, precision, and recall. Hyperparameter tune with GridSearchCV.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-body">
+        <div class="step-title">Best Model Selection & Serialization</div>
+        <div class="step-desc">Select the top-performing model (typically Random Forest or XGBoost). Save as .pkl using joblib. Save label encoders, scaler, and symptom list for inference.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">5</div>
+      <div class="step-body">
+        <div class="step-title">FastAPI Backend Development</div>
+        <div class="step-desc">Build REST API with /predict endpoint, /health check, /symptoms list, and /disease-info routes. Add CORS, request validation with Pydantic, and proper error handling.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">6</div>
+      <div class="step-body">
+        <div class="step-title">React Ultra-Luxury Frontend</div>
+        <div class="step-desc">Build a stunning medical-grade UI with symptom multi-select, animated diagnosis cards, confidence charts (Recharts), medicine detail modals, and dark/light mode.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot">7</div>
+      <div class="step-body">
+        <div class="step-title">Dockerize & Deploy</div>
+        <div class="step-desc">Write Dockerfile and docker-compose for backend + frontend. Deploy backend on Render/Railway, frontend on Vercel. Configure environment variables and production builds.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⚙</div> Tech Stack</div>
+    <div>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#3B82F6"></span>Python 3.11</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#F59E0B"></span>Pandas / NumPy</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#10B981"></span>Scikit-learn</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#EF4444"></span>XGBoost</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#8B5CF6"></span>TensorFlow/Keras</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#06B6D4"></span>FastAPI</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#F59E0B"></span>React 18</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#3B82F6"></span>TailwindCSS</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#10B981"></span>Recharts</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#6B7280"></span>Docker</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#EF4444"></span>Uvicorn</span>
+      <span class="tech-pill"><span class="tech-pill-dot" style="background:#8B5CF6"></span>Framer Motion</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== DATASET ========== -->
+<div class="panel" id="panel-dataset">
+  <p class="section-title"><span class="accent">§</span> Dataset Collection</p>
+  <p class="section-desc">Use these verified Kaggle datasets. The primary dataset is the one with symptom → disease → medicine mappings. Download all three and merge for richer predictions.</p>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">★</div> Primary Datasets (Download These)</div>
+    <div class="grid-2">
+      <div class="dataset-card primary">
+        <div class="dataset-name">Disease Symptom Prediction</div>
+        <div class="dataset-meta">itachi9baka / symptom-disease-dataset</div>
+        <div class="dataset-meta">133 diseases · 132 symptoms · 4920 rows</div>
+        <div class="dataset-tag">⭐ Best for this project</div>
+      </div>
+      <div class="dataset-card primary">
+        <div class="dataset-name">Medicine Recommendation Dataset</div>
+        <div class="dataset-meta">noorsaeed / medicine-recommendation-system-dataset</div>
+        <div class="dataset-meta">Includes medications per disease</div>
+        <div class="dataset-tag">⭐ Primary recommendation source</div>
+      </div>
+      <div class="dataset-card">
+        <div class="dataset-name">Drug Reviews Dataset</div>
+        <div class="dataset-meta">jessicali9530 / kuc-hackathon-winter-2018</div>
+        <div class="dataset-meta">UCI Drug reviews · ratings · conditions</div>
+        <div class="dataset-tag">Supplementary</div>
+      </div>
+      <div class="dataset-card">
+        <div class="dataset-name">Symptom-Severity Dataset</div>
+        <div class="dataset-meta">itachi9baka / symptom-severity-dataset</div>
+        <div class="dataset-meta">Symptom weight scores for ranking</div>
+        <div class="dataset-tag">For ranking features</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — Data Download</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 Paste this prompt into your AI assistant in VSCode</div>
+      Write a Python script `data/download_datasets.py` that:
+      1. Uses kaggle API (import kaggle) to download these datasets:
+         - noorsaeed/medicine-recommendation-system-dataset
+         - itachi9baka/symptom-disease-dataset
+      2. Saves all CSVs into ./data/raw/ directory
+      3. Prints shape, columns, and first 5 rows of each file
+      4. Checks for null values and prints a null report
+      5. Saves a combined EDA report as data/eda_report.txt
+      Include requirements: pip install kaggle pandas openpyxl
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> Kaggle API Setup Code</div>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="cm"># 1. Install kaggle CLI</span>
+pip install kaggle
+
+<span class="cm"># 2. Place kaggle.json in ~/.kaggle/</span>
+<span class="cm"># Download from: kaggle.com → Account → API → Create New Token</span>
+
+<span class="cm"># 3. Download primary dataset</span>
+kaggle datasets download -d noorsaeed/medicine-recommendation-system-dataset -p data/raw --unzip
+kaggle datasets download -d itachi9baka/symptom-disease-dataset -p data/raw --unzip
+
+<span class="cm"># 4. Verify files</span>
+ls data/raw/
+    </div>
+  </div>
+</div>
+
+<!-- ========== PREPROCESS ========== -->
+<div class="panel" id="panel-preprocess">
+  <p class="section-title"><span class="accent">§</span> Data Preprocessing</p>
+  <p class="section-desc">Transform raw medical CSV data into a clean, ML-ready format. This phase is critical — model accuracy depends on this step.</p>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — Full Preprocessing Pipeline</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt</div>
+      Create `src/preprocessing/preprocess.py` with a complete preprocessing pipeline for a medicine recommendation system. Include:
+
+      1. Load dataset from data/raw/ using pandas
+      2. Clean: strip whitespace from symptom columns, fill NaN symptoms with empty string
+      3. Encode symptoms using sklearn MultiLabelBinarizer — create binary symptom matrix (0/1 for each symptom)
+      4. Encode target disease column with LabelEncoder
+      5. Handle class imbalance using SMOTE from imbalanced-learn
+      6. Split data 80/20 train/test with stratify=y and random_state=42
+      7. Save processed data: X_train, X_test, y_train, y_test as numpy arrays in data/processed/
+      8. Save encoders: symptom_encoder.pkl, label_encoder.pkl, symptom_list.json using joblib
+      9. Print full preprocessing report with shapes, class distribution, and symptom count
+      10. Add error handling and logging throughout
+
+      Use: pandas, numpy, sklearn, imbalanced-learn, joblib
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> Core Preprocessing Code</div>
+    <div class="code-block" style="font-size:11px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="fn">LabelEncoder</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> <span class="fn">train_test_split</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="fn">MultiLabelBinarizer</span>
+<span class="kw">from</span> imblearn.over_sampling <span class="kw">import</span> <span class="fn">SMOTE</span>
+<span class="kw">import</span> joblib, json, os
+
+<span class="kw">def</span> <span class="fn">preprocess</span>(csv_path: str):
+    df = pd.<span class="fn">read_csv</span>(csv_path)
+    
+    <span class="cm"># Get symptom columns (all except 'Disease')</span>
+    symptom_cols = [c <span class="kw">for</span> c <span class="kw">in</span> df.columns <span class="kw">if</span> c != <span class="str">'Disease'</span>]
+    
+    <span class="cm"># Collect symptoms per row as list</span>
+    df[<span class="str">'symptoms_list'</span>] = df[symptom_cols].<span class="fn">apply</span>(
+        <span class="kw">lambda</span> row: [s.<span class="fn">strip</span>() <span class="kw">for</span> s <span class="kw">in</span> row <span class="kw">if</span> pd.<span class="fn">notna</span>(s) <span class="kw">and</span> s != <span class="str">''</span>], axis=<span class="num">1</span>
+    )
+    
+    <span class="cm"># MultiLabelBinarizer for symptoms</span>
+    mlb = <span class="fn">MultiLabelBinarizer</span>()
+    X = mlb.<span class="fn">fit_transform</span>(df[<span class="str">'symptoms_list'</span>])
+    
+    <span class="cm"># Label encode diseases</span>
+    le = <span class="fn">LabelEncoder</span>()
+    y = le.<span class="fn">fit_transform</span>(df[<span class="str">'Disease'</span>])
+    
+    <span class="cm"># SMOTE for class balance</span>
+    sm = <span class="fn">SMOTE</span>(random_state=<span class="num">42</span>)
+    X_res, y_res = sm.<span class="fn">fit_resample</span>(X, y)
+    
+    X_train, X_test, y_train, y_test = <span class="fn">train_test_split</span>(
+        X_res, y_res, test_size=<span class="num">0.2</span>, stratify=y_res, random_state=<span class="num">42</span>
+    )
+    
+    <span class="cm"># Save artifacts</span>
+    joblib.<span class="fn">dump</span>(mlb, <span class="str">'models/symptom_encoder.pkl'</span>)
+    joblib.<span class="fn">dump</span>(le, <span class="str">'models/label_encoder.pkl'</span>)
+    json.<span class="fn">dump</span>(<span class="fn">list</span>(mlb.classes_), <span class="fn">open</span>(<span class="str">'models/symptom_list.json'</span>, <span class="str">'w'</span>))
+    
+    <span class="kw">return</span> X_train, X_test, y_train, y_test, mlb, le
+    </div>
+  </div>
+
+  <div class="info-tag">
+    <span class="info-icon">ℹ</span>
+    <span>SMOTE (Synthetic Minority Over-sampling Technique) is essential here because medical datasets are highly imbalanced — some diseases appear much more than others. Without it, your model will predict common diseases for everything.</span>
+  </div>
+</div>
+
+<!-- ========== MODELS ========== -->
+<div class="panel" id="panel-models">
+  <p class="section-title"><span class="accent">§</span> Model Training & Selection</p>
+  <p class="section-desc">Train 6 models, compare performance, tune the best with GridSearchCV, and save as production artifact.</p>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">★</div> Expected Model Performance</div>
+    <div class="model-row best">
+      <div class="model-name">🌲 Random Forest</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:98%"></div></div>
+      <div class="model-acc">97.8%</div>
+      <div class="best-badge">Best Model</div>
+    </div>
+    <div class="model-row">
+      <div class="model-name">⚡ XGBoost</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:95%"></div></div>
+      <div class="model-acc">95.2%</div>
+    </div>
+    <div class="model-row">
+      <div class="model-name">🔮 SVM (RBF Kernel)</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:93%"></div></div>
+      <div class="model-acc">93.1%</div>
+    </div>
+    <div class="model-row">
+      <div class="model-name">🧠 MLP Neural Network</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:91%"></div></div>
+      <div class="model-acc">91.4%</div>
+    </div>
+    <div class="model-row">
+      <div class="model-name">📊 Naive Bayes</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:82%"></div></div>
+      <div class="model-acc">82.3%</div>
+    </div>
+    <div class="model-row">
+      <div class="model-name">🌿 Decision Tree</div>
+      <div class="model-bar-wrap"><div class="model-bar" style="width:78%"></div></div>
+      <div class="model-acc">78.9%</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — Train All Models</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt</div>
+      Create `src/training/train_models.py` that trains 6 ML models for disease prediction. For each model:
+      
+      1. Train these models: RandomForestClassifier, XGBClassifier, SVC(probability=True), GaussianNB, DecisionTreeClassifier, MLPClassifier(hidden_layer_sizes=(256,128,64))
+      2. Evaluate each with: accuracy_score, classification_report, confusion_matrix
+      3. Store results in a dict with model name, accuracy, f1_macro, training_time
+      4. Use GridSearchCV on the top 2 models for hyperparameter tuning
+      5. Random Forest params to tune: n_estimators=[100,200,300], max_depth=[None,10,20], min_samples_split=[2,5]
+      6. XGBoost params: n_estimators=[100,200], learning_rate=[0.01,0.1], max_depth=[3,6,9]
+      7. Save the best model as models/best_model.pkl using joblib
+      8. Save comparison results as reports/model_comparison.json
+      9. Generate and save confusion matrix plot as reports/confusion_matrix.png
+      10. Print a beautiful formatted table of all results using tabulate
+
+      Load data from data/processed/ numpy arrays.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> Model Training Core</div>
+    <div class="code-block" style="font-size:10.5px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="fn">RandomForestClassifier</span>
+<span class="kw">from</span> sklearn.svm <span class="kw">import</span> <span class="fn">SVC</span>
+<span class="kw">from</span> sklearn.naive_bayes <span class="kw">import</span> <span class="fn">GaussianNB</span>
+<span class="kw">from</span> sklearn.neural_network <span class="kw">import</span> <span class="fn">MLPClassifier</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> <span class="fn">GridSearchCV</span>
+<span class="kw">from</span> xgboost <span class="kw">import</span> <span class="fn">XGBClassifier</span>
+<span class="kw">import</span> joblib, time, json
+
+MODELS = {
+    <span class="str">"Random Forest"</span>: <span class="fn">RandomForestClassifier</span>(n_estimators=<span class="num">200</span>, random_state=<span class="num">42</span>),
+    <span class="str">"XGBoost"</span>:       <span class="fn">XGBClassifier</span>(use_label_encoder=<span class="kw">False</span>, eval_metric=<span class="str">'mlogloss'</span>),
+    <span class="str">"SVM"</span>:           <span class="fn">SVC</span>(kernel=<span class="str">'rbf'</span>, probability=<span class="kw">True</span>),
+    <span class="str">"Naive Bayes"</span>:   <span class="fn">GaussianNB</span>(),
+    <span class="str">"MLP"</span>:           <span class="fn">MLPClassifier</span>(hidden_layer_sizes=(<span class="num">256</span>,<span class="num">128</span>,<span class="num">64</span>), max_iter=<span class="num">500</span>),
+}
+
+results = {}
+<span class="kw">for</span> name, model <span class="kw">in</span> MODELS.items():
+    t = time.time()
+    model.<span class="fn">fit</span>(X_train, y_train)
+    acc = model.<span class="fn">score</span>(X_test, y_test)
+    results[name] = {<span class="str">"accuracy"</span>: acc, <span class="str">"time"</span>: <span class="fn">round</span>(time.time()-t, <span class="num">2</span>)}
+    <span class="fn">print</span>(<span class="str">f"✓ {name}: {acc:.4f}"</span>)
+
+<span class="cm"># Save best model</span>
+best = <span class="fn">max</span>(results, key=<span class="kw">lambda</span> k: results[k][<span class="str">"accuracy"</span>])
+joblib.<span class="fn">dump</span>(MODELS[best], <span class="str">'models/best_model.pkl'</span>)
+<span class="fn">print</span>(<span class="str">f"\n🏆 Best: {best} saved to models/best_model.pkl"</span>)
+    </div>
+  </div>
+</div>
+
+<!-- ========== BACKEND ========== -->
+<div class="panel" id="panel-backend">
+  <p class="section-title"><span class="accent">§</span> FastAPI Backend</p>
+  <p class="section-desc">Production-grade REST API with prediction, disease info, symptom listing, and health check endpoints.</p>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">◆</div> API Endpoints</div>
+    <div class="endpoint">
+      <span class="method post">POST</span>
+      <span class="endpoint-path">/api/predict</span>
+      <span class="endpoint-desc">Input symptoms → returns disease + medicines + confidence</span>
+    </div>
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <span class="endpoint-path">/api/symptoms</span>
+      <span class="endpoint-desc">Returns full list of 132 supported symptoms</span>
+    </div>
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <span class="endpoint-path">/api/disease/{name}</span>
+      <span class="endpoint-desc">Returns disease details, description, precautions</span>
+    </div>
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <span class="endpoint-path">/api/health</span>
+      <span class="endpoint-desc">Health check — returns model version and status</span>
+    </div>
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <span class="endpoint-path">/docs</span>
+      <span class="endpoint-desc">Auto-generated Swagger UI documentation</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — FastAPI App</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt</div>
+      Create `backend/main.py` — a production FastAPI application for medicine recommendation. Include:
+
+      1. Load models at startup: best_model.pkl, symptom_encoder.pkl, label_encoder.pkl, symptom_list.json using @app.on_event("startup")
+      2. Pydantic request model: PredictionRequest with symptoms: List[str] (min 1, max 17)
+      3. Pydantic response: PredictionResponse with predicted_disease, confidence, top_3_diseases (list), recommended_medicines (list with name, dosage, type), precautions (list), diet_recommendations (list)
+      4. POST /api/predict: encode symptoms → predict → decode → lookup medicine DB → return full response
+      5. GET /api/symptoms: return all 132 symptoms as alphabetically sorted list
+      6. GET /api/disease/{name}: return disease description, diet, workout, medication list
+      7. GET /api/health: return {"status":"ok","model":"RandomForest","version":"1.0.0"}
+      8. CORS middleware allowing all origins for development
+      9. Global exception handler returning proper JSON errors
+      10. Add uvicorn runner at bottom: if __name__ == '__main__'
+
+      Also create backend/medicine_db.py with a dict mapping disease names to medicines, dosage, precautions, and diet info for at least 20 common diseases.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> FastAPI Core — main.py</div>
+    <div class="code-block" style="font-size:10.5px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException
+<span class="kw">from</span> fastapi.middleware.cors <span class="kw">import</span> <span class="fn">CORSMiddleware</span>
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, validator
+<span class="kw">from</span> typing <span class="kw">import</span> List
+<span class="kw">import</span> joblib, json, numpy <span class="kw">as</span> np
+
+app = <span class="fn">FastAPI</span>(title=<span class="str">"MediRec API"</span>, version=<span class="str">"1.0.0"</span>)
+app.<span class="fn">add_middleware</span>(<span class="fn">CORSMiddleware</span>, allow_origins=[<span class="str">"*"</span>], allow_methods=[<span class="str">"*"</span>], allow_headers=[<span class="str">"*"</span>])
+
+<span class="cm"># Load models at startup</span>
+model = symptom_enc = label_enc = symptom_list = <span class="kw">None</span>
+
+<span class="kw">@app.on_event</span>(<span class="str">"startup"</span>)
+<span class="kw">async def</span> <span class="fn">load_models</span>():
+    <span class="kw">global</span> model, symptom_enc, label_enc, symptom_list
+    model       = joblib.<span class="fn">load</span>(<span class="str">"../models/best_model.pkl"</span>)
+    symptom_enc = joblib.<span class="fn">load</span>(<span class="str">"../models/symptom_encoder.pkl"</span>)
+    label_enc   = joblib.<span class="fn">load</span>(<span class="str">"../models/label_encoder.pkl"</span>)
+    symptom_list = json.<span class="fn">load</span>(<span class="fn">open</span>(<span class="str">"../models/symptom_list.json"</span>))
+
+<span class="kw">class</span> <span class="fn">PredictionRequest</span>(BaseModel):
+    symptoms: List[str]
+    <span class="kw">@validator</span>(<span class="str">'symptoms'</span>)
+    <span class="kw">def</span> <span class="fn">check_symptoms</span>(cls, v):
+        <span class="kw">if not</span> v: <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"Provide at least 1 symptom"</span>)
+        <span class="kw">return</span> v
+
+<span class="kw">@app.post</span>(<span class="str">"/api/predict"</span>)
+<span class="kw">async def</span> <span class="fn">predict</span>(req: PredictionRequest):
+    encoded = symptom_enc.<span class="fn">transform</span>([req.symptoms])
+    proba   = model.<span class="fn">predict_proba</span>(encoded)[<span class="num">0</span>]
+    top3_idx = np.<span class="fn">argsort</span>(proba)[::-<span class="num">1</span>][:<span class="num">3</span>]
+    disease = label_enc.<span class="fn">inverse_transform</span>([top3_idx[<span class="num">0</span>]])[<span class="num">0</span>]
+    <span class="kw">return</span> {
+        <span class="str">"predicted_disease"</span>: disease,
+        <span class="str">"confidence"</span>: <span class="fn">round</span>(<span class="fn">float</span>(proba[top3_idx[<span class="num">0</span>]]) * <span class="num">100</span>, <span class="num">2</span>),
+        <span class="str">"top_3"</span>: [label_enc.classes_[i] <span class="kw">for</span> i <span class="kw">in</span> top3_idx],
+        <span class="str">"medicines"</span>: <span class="fn">get_medicines</span>(disease),
+        <span class="str">"precautions"</span>: <span class="fn">get_precautions</span>(disease)
+    }
+    </div>
+  </div>
+</div>
+
+<!-- ========== FRONTEND ========== -->
+<div class="panel" id="panel-frontend">
+  <p class="section-title"><span class="accent">§</span> React Ultra-Luxury Frontend</p>
+  <p class="section-desc">A stunning, medical-grade interface with dark mode, animated components, symptom autocomplete, confidence visualizations, and medicine cards.</p>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — React App Setup</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt — Run First</div>
+      Create a React application for a Medicine Recommendation System with this tech stack:
+      npm create vite@latest frontend -- --template react
+      cd frontend && npm install tailwindcss @tailwindcss/vite framer-motion recharts react-select axios react-hot-toast lucide-react
+
+      Create `frontend/src/config/api.js` with BASE_URL = 'http://localhost:8000'
+
+      Create these components:
+      1. `src/components/SymptomSelector.jsx` — Multi-select autocomplete for symptoms using react-select with dark medical theme
+      2. `src/components/DiagnosisCard.jsx` — Animated card showing disease, confidence meter, top-3 diseases
+      3. `src/components/MedicineCard.jsx` — Card with medicine name, type badge, dosage info
+      4. `src/components/ConfidenceChart.jsx` — Recharts RadialBarChart showing confidence percentage
+      5. `src/components/PrecautionsList.jsx` — Animated list of precautions with icons
+      6. `src/pages/HomePage.jsx` — Landing with hero, features, how-it-works
+      7. `src/pages/DiagnosisPage.jsx` — Main diagnosis page with full prediction flow
+
+      Design: Deep navy/dark teal with gold accents, Playfair Display for headings, DM Mono for medical data, glass morphism cards, smooth Framer Motion animations, animated gradient backgrounds.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — Main Diagnosis Page</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt — Diagnosis Page</div>
+      Create `frontend/src/pages/DiagnosisPage.jsx` with this full flow:
+
+      State: symptoms (selected list), loading, result (API response), error
+
+      UI Sections:
+      1. TOP HERO: "AI Medical Diagnosis" title with animated gradient, subtitle, disclaimer badge
+      2. SYMPTOM SELECTOR: Full-width react-select multi with 132 symptoms loaded from GET /api/symptoms. Dark styled with gold accents. Shows selected count badge.
+      3. ANALYZE BUTTON: Large gradient button with pulse animation, disabled when no symptoms, shows spinner when loading
+      4. RESULTS SECTION (shown after prediction):
+         a. Disease name card with animated entrance (Framer Motion slide-up), confidence percentage with animated ring chart (Recharts RadialBarChart), "Top 3 Possible Conditions" list with probability bars
+         b. Medicines grid: 3-col responsive grid, each card has medicine name, type (Antibiotic/Analgesic/etc) colored badge, dosage, side effects collapsible
+         c. Precautions: icon list (Lucide icons) with green checkmarks
+         d. Diet & Workout recommendations in 2 side-by-side cards
+      5. DISCLAIMER at bottom in amber warning style
+
+      Make API call: POST to /api/predict with { symptoms: selectedSymptoms }
+      Show react-hot-toast notifications for success/error
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> Tailwind Config + Theme</div>
+    <div class="code-block" style="font-size:10.5px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="cm">// tailwind.config.js</span>
+<span class="kw">export default</span> {
+  content: [<span class="str">"./src/**/*.{js,jsx}"</span>],
+  theme: {
+    extend: {
+      colors: {
+        ink:     { DEFAULT: <span class="str">'#0A0F14'</span>, <span class="num">800</span>: <span class="str">'#0D1B2A'</span> },
+        gold:    { DEFAULT: <span class="str">'#C9A84C'</span>, light: <span class="str">'#E8C97A'</span> },
+        emerald: { DEFAULT: <span class="str">'#0D7A5F'</span>, light: <span class="str">'#10A37F'</span> },
+        medical: { <span class="num">50</span>:  <span class="str">'#F0FDF9'</span>, <span class="num">500</span>: <span class="str">'#0D9488'</span> },
+      },
+      fontFamily: {
+        display: [<span class="str">'Playfair Display'</span>, <span class="str">'serif'</span>],
+        mono:    [<span class="str">'DM Mono'</span>, <span class="str">'monospace'</span>],
+        sans:    [<span class="str">'Outfit'</span>, <span class="str">'sans-serif'</span>],
+      },
+      animation: {
+        <span class="str">'pulse-slow'</span>: <span class="str">'pulse 3s ease-in-out infinite'</span>,
+        <span class="str">'float'</span>:      <span class="str">'float 6s ease-in-out infinite'</span>,
+      },
+    },
+  },
+  plugins: [],
+}
+    </div>
+  </div>
+</div>
+
+<!-- ========== FILE STRUCTURE ========== -->
+<div class="panel" id="panel-structure">
+  <p class="section-title"><span class="accent">§</span> Complete Project File Structure</p>
+  <p class="section-desc">Organize your VSCode workspace exactly like this for clean, deployment-ready architecture.</p>
+
+  <div class="file-tree">
+<span class="ft-dir">medicine-recommendation-system/</span>
+├── <span class="ft-dir">data/</span>
+│   ├── <span class="ft-dir">raw/</span>                     <span class="ft-comment"># Downloaded CSVs</span>
+│   ├── <span class="ft-dir">processed/</span>               <span class="ft-comment"># Numpy arrays after preprocessing</span>
+│   └── <span class="ft-py">download.py</span>
+│
+├── <span class="ft-dir">models/</span>                      <span class="ft-comment"># Saved .pkl model files</span>
+│   ├── <span class="ft-file">best_model.pkl</span>
+│   ├── <span class="ft-file">symptom_encoder.pkl</span>
+│   ├── <span class="ft-file">label_encoder.pkl</span>
+│   └── <span class="ft-json">symptom_list.json</span>
+│
+├── <span class="ft-dir">notebooks/</span>
+│   ├── <span class="ft-file">01_EDA.ipynb</span>             <span class="ft-comment"># Exploratory Data Analysis</span>
+│   ├── <span class="ft-file">02_preprocessing.ipynb</span>
+│   ├── <span class="ft-file">03_model_training.ipynb</span>
+│   └── <span class="ft-file">04_evaluation.ipynb</span>
+│
+├── <span class="ft-dir">src/</span>
+│   ├── <span class="ft-py">preprocessing.py</span>
+│   ├── <span class="ft-py">train_models.py</span>
+│   ├── <span class="ft-py">evaluate.py</span>
+│   └── <span class="ft-py">medicine_db.py</span>
+│
+├── <span class="ft-dir">backend/</span>
+│   ├── <span class="ft-py">main.py</span>                  <span class="ft-comment"># FastAPI app</span>
+│   ├── <span class="ft-py">medicine_db.py</span>           <span class="ft-comment"># Disease-Medicine mapping DB</span>
+│   ├── <span class="ft-py">schemas.py</span>               <span class="ft-comment"># Pydantic models</span>
+│   ├── <span class="ft-py">predictor.py</span>             <span class="ft-comment"># Prediction logic</span>
+│   ├── <span class="ft-file">requirements.txt</span>
+│   └── <span class="ft-file">Dockerfile</span>
+│
+├── <span class="ft-dir">frontend/</span>
+│   ├── <span class="ft-dir">src/</span>
+│   │   ├── <span class="ft-dir">components/</span>
+│   │   │   ├── <span class="ft-js">SymptomSelector.jsx</span>
+│   │   │   ├── <span class="ft-js">DiagnosisCard.jsx</span>
+│   │   │   ├── <span class="ft-js">MedicineCard.jsx</span>
+│   │   │   ├── <span class="ft-js">ConfidenceChart.jsx</span>
+│   │   │   └── <span class="ft-js">Navbar.jsx</span>
+│   │   ├── <span class="ft-dir">pages/</span>
+│   │   │   ├── <span class="ft-js">HomePage.jsx</span>
+│   │   │   └── <span class="ft-js">DiagnosisPage.jsx</span>
+│   │   ├── <span class="ft-dir">config/</span>
+│   │   │   └── <span class="ft-js">api.js</span>
+│   │   ├── <span class="ft-js">App.jsx</span>
+│   │   └── <span class="ft-js">main.jsx</span>
+│   ├── <span class="ft-json">package.json</span>
+│   ├── <span class="ft-file">tailwind.config.js</span>
+│   └── <span class="ft-file">Dockerfile</span>
+│
+├── <span class="ft-file">docker-compose.yml</span>
+├── <span class="ft-md">README.md</span>
+└── <span class="ft-file">.env.example</span>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><div class="card-icon">⌨</div> requirements.txt — Backend</div>
+    <div class="code-block" style="font-size:11px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+fastapi==0.111.0
+uvicorn[standard]==0.30.0
+scikit-learn==1.4.2
+xgboost==2.0.3
+imbalanced-learn==0.12.3
+pandas==2.2.2
+numpy==1.26.4
+joblib==1.4.2
+pydantic==2.7.1
+python-multipart==0.0.9
+    </div>
+  </div>
+</div>
+
+<!-- ========== DEPLOYMENT ========== -->
+<div class="panel" id="panel-deploy">
+  <p class="section-title"><span class="accent">§</span> Deployment — Production Ready</p>
+  <p class="section-desc">Containerize with Docker and deploy backend + frontend on free cloud platforms.</p>
+
+  <div class="grid-3" style="margin-bottom:16px">
+    <div class="deploy-option recommended">
+      <div class="deploy-logo">🚀</div>
+      <div class="deploy-name">Render</div>
+      <div class="deploy-desc">Deploy FastAPI backend. Free tier available. Auto-deploys from GitHub.</div>
+      <div class="deploy-rec">Recommended Backend</div>
+    </div>
+    <div class="deploy-option recommended">
+      <div class="deploy-logo">▲</div>
+      <div class="deploy-name">Vercel</div>
+      <div class="deploy-desc">Deploy React frontend. Instant global CDN. Free tier, perfect for React/Vite.</div>
+      <div class="deploy-rec">Recommended Frontend</div>
+    </div>
+    <div class="deploy-option">
+      <div class="deploy-logo">🐳</div>
+      <div class="deploy-name">Docker</div>
+      <div class="deploy-desc">Containerize both services with docker-compose. Deploy anywhere.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> docker-compose.yml</div>
+    <div class="code-block" style="font-size:10.5px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="em">version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports: ["8000:8000"]
+    volumes: ["./models:/app/models"]
+    environment:
+      - MODEL_PATH=/app/models/best_model.pkl
+    restart: always
+
+  frontend:
+    build: ./frontend
+    ports: ["3000:3000"]
+    depends_on: [backend]
+    environment:
+      - VITE_API_URL=http://backend:8000
+    restart: always</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">⌨</div> Backend Dockerfile</div>
+    <div class="code-block" style="font-size:10.5px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="em">FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">▶</div> VSCode Prompt — Final Deployment Check</div>
+    <div class="prompt-block">
+      <div class="prompt-label">📋 VSCode AI Prompt</div>
+      Review my complete Medicine Recommendation System project and:
+      1. Check all imports are correct in main.py and all React components
+      2. Verify CORS is properly configured for production URL
+      3. Add environment variable support (.env) for API_URL in React
+      4. Create a production Vite build configuration
+      5. Write a complete README.md with: project overview, tech stack, installation steps, API docs, screenshots placeholder, deployment instructions
+      6. Add a GitHub Actions CI/CD workflow .github/workflows/deploy.yml that: runs tests on push, builds Docker images, and deploys to Render/Vercel on main branch merge
+      7. Create a requirements.txt for the ML training phase (separate from backend)
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title"><div class="card-icon">◆</div> Launch Commands (Quick Reference)</div>
+    <div class="code-block" style="font-size:11px">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="cm"># 1. Train models (run once)</span>
+cd src && python train_models.py
+
+<span class="cm"># 2. Start backend</span>
+cd backend && uvicorn main:app --reload --port 8000
+
+<span class="cm"># 3. Start frontend</span>
+cd frontend && npm run dev
+
+<span class="cm"># 4. Docker (production)</span>
+docker-compose up --build
+
+<span class="cm"># 5. Test API</span>
+curl -X POST http://localhost:8000/api/predict \
+  -H "Content-Type: application/json" \
+  -d '{"symptoms": ["fever", "headache", "fatigue"]}'
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function copyCode(btn) {
+  const block = btn.parentElement;
+  const text = block.innerText.replace('Copy', '').replace('Copied!', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.style.background = 'rgba(13,122,95,0.3)';
+    btn.style.color = '#10A37F';
+    btn.style.borderColor = 'rgba(13,122,95,0.5)';
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
